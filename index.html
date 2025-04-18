@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Türkiye Cumhuriyeti</title>
+  <style>
+    body {
+      background-color: #111;
+      color: #fff;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 30px;
+      gap: 15px;
+    }
+
+    .header img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .header span {
+      font-size: 28px;
+      font-weight: bold;
+      color: #00bfff;
+      text-shadow: 0 0 10px #00bfff;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .row {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+
+    .button-wrapper {
+      text-align: center;
+      transition: opacity 0.3s;
+      filter: drop-shadow(0 0 5px rgba(0, 255, 0, 0));
+    }
+
+    .switch {
+      width: 60px;
+      height: 30px;
+      background: linear-gradient(to bottom, #800 0%, #f00 100%);
+      border-radius: 30px;
+      position: relative;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: inset 0 0 6px rgba(255,255,255,0.3);
+    }
+
+    .switch::before {
+      content: "";
+      position: absolute;
+      width: 24px;
+      height: 24px;
+      top: 3px;
+      left: 3px;
+      background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+      border-radius: 50%;
+      transition: left 0.4s ease, background 0.3s ease;
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    }
+
+    .switch.on {
+      background: linear-gradient(to bottom, #0f0 0%, #070 100%);
+      box-shadow: 0 0 10px #0f0, inset 0 0 6px rgba(255,255,255,0.3);
+    }
+
+    .switch.on::before {
+      left: 33px;
+      background: radial-gradient(circle at 30% 30%, #fff, #afffaf);
+    }
+
+    .label {
+      font-size: 15px;
+      margin-top: 5px;
+    }
+
+    .disabled {
+      pointer-events: none;
+    }
+
+    .glow {
+      filter: drop-shadow(0 0 10px #0f0);
+    }
+
+    .image-box {
+      margin-top: 30px;
+      height: 300px;
+      position: relative;
+    }
+
+    .image-box img {
+      max-height: 100%;
+      max-width: 90%;
+      border-radius: 15px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      cursor: default;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .image-box img.active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    #ataturk.active {
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    #erdogan.active {
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    #erdogan {
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Başlık -->
+  <div class="header" id="header">
+    <img src="./img/cropped-tc-bayrak.png" alt="TC" id="logo">
+    <span id="title">Türkiye Cumhuriyeti</span>
+  </div>
+
+  <div class="row" id="row1">
+    <div class="button-wrapper">
+      <div class="switch" data-name="Ekonomi"></div>
+      <div class="label">Ekonomi</div>
+    </div>
+    <div class="button-wrapper">
+      <div class="switch" data-name="Adalet"></div>
+      <div class="label">Adalet</div>
+    </div>
+    <div class="button-wrapper">
+      <div class="switch" data-name="Eğitim"></div>
+      <div class="label">Eğitim</div>
+    </div>
+  </div>
+
+  <div class="row" id="row2">
+    <div class="button-wrapper">
+      <div class="switch" data-name="Özgürlük"></div>
+      <div class="label">Özgürlük</div>
+    </div>
+    <div class="button-wrapper">
+      <div class="switch" data-name="Liyakat"></div>
+      <div class="label">Liyakat</div>
+    </div>
+    <div class="button-wrapper" id="ampul-wrapper">
+      <div class="switch" id="ampul"></div>
+      <div class="label">Ampul</div>
+    </div>
+  </div>
+
+  <!-- Resimler -->
+  <div class="image-box">
+    <img src="./img/mustafa-kemal-ataturk_01_tam35.png" alt="Atatürk" id="ataturk" class="active">
+    <img src="./img/recep-tayyip-erdogan-cumhurba-fkan-geliyor-banses-gazetesi-band-rma-33.png" alt="Erdoğan" id="erdogan">
+  </div>
+
+  <script>
+    const ampul = document.getElementById("ampul");
+    const allSwitches = document.querySelectorAll(".switch:not(#ampul)");
+    const allWrappers = document.querySelectorAll(".button-wrapper:not(#ampul-wrapper)");
+    const title = document.getElementById("title");
+    const logo = document.getElementById("logo");
+    const ataturk = document.getElementById("ataturk");
+    const erdogan = document.getElementById("erdogan");
+
+    allSwitches.forEach(sw => {
+      sw.addEventListener("click", () => {
+        if (ampul.classList.contains("on")) return;
+        sw.classList.toggle("on");
+        sw.parentElement.classList.toggle("glow", sw.classList.contains("on"));
+      });
+    });
+
+    ampul.addEventListener("click", () => {
+      const isOn = ampul.classList.toggle("on");
+
+      if (isOn) {
+        allSwitches.forEach(sw => {
+          if (sw.classList.contains("on")) {
+            sw.classList.remove("on");
+            sw.parentElement.classList.remove("glow");
+          }
+        });
+        allWrappers.forEach(w => w.classList.add("disabled"));
+
+        title.textContent = "AK Parti";
+        title.style.color = "#FFA500";
+        title.style.textShadow = "0 0 10px #FFA500";
+        logo.src = "./img/resim-28867.png";
+
+        ataturk.classList.remove("active");
+        erdogan.classList.add("active");
+      } else {
+        allWrappers.forEach(w => w.classList.remove("disabled"));
+
+        title.textContent = "Türkiye Cumhuriyeti";
+        title.style.color = "#00bfff";
+        title.style.textShadow = "0 0 10px #00bfff";
+        logo.src = "./img/cropped-tc-bayrak.png";
+
+        erdogan.classList.remove("active");
+        ataturk.classList.add("active");
+      }
+    });
+
+    ataturk.addEventListener("click", () => {
+      if (!ataturk.classList.contains("active")) return;
+      window.location.href = "genclige-hitabe.html";
+    });
+  erdogan.addEventListener("click", () => {
+  if (!erdogan.classList.contains("active")) return; // Changed this line to check if erdogan is active
+  window.location.href = "erdogan.html";
+});
+  </script>
+
+</body>
+</html>
